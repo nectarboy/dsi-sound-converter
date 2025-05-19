@@ -60,6 +60,7 @@ def convert():
     path = Path(filepathstr)
     filenames = []
     convertingDirectory = False
+    validConversions = 0
 
     if not path.exists():
         print("Path doesn't exist.")
@@ -82,14 +83,15 @@ def convert():
         convertedfilepath = dirstr.split(".")
         # skip non .dat files
         if len(convertedfilepath) == 1 or convertedfilepath[len(convertedfilepath)-1] != "dat":
-            #print(dirstr, "is not a .dat file")
+            if not convertingDirectory:
+                print(dirstr, "is not a .dat file.")
             continue
         # file is .dat file
         else:
             convertedfilepath.pop()
             convertedfilepath = "".join(convertedfilepath) + ".wav"
 
-        print('converting', dirstr)
+        print('converting', dirstr + '...')
 
         # decoding adpcm to pcm16
         bin = list(open(dirstr, 'rb').read())
@@ -102,7 +104,7 @@ def convert():
             bin[2] != 0xec or
             bin[3] != 0x3f
             ):
-            print("File is not a valid sound file.")
+            print(dirstr, "is not a valid sound file.")
             continue
 
         samplesCount = readU16LE(bin, 8) * 8 # TODO, properly calc this by counting empty space in file
@@ -237,22 +239,27 @@ def convert():
         with open(convertedfilepath, "wb") as f:
             f.write(bytes(wavfile))
 
-    print("done!")
+        validConversions += 1
 
-    # playback
-    if not convertingDirectory and len(sys.argv) >= 3 and sys.argv[2] == '-p':
-        import pyaudio
+    if validConversions != 0:
+        print("done!")
 
-        print('playing', convertedfilepath)
-        player = pyaudio.PyAudio()
-        stream = player.open(
-            format = pyaudio.paInt16,
-            channels = 1,
-            rate = 16384,
-            output = True
-        )
-        stream.write(bytes(pcmdata))
-        stream.close()
-        player.terminate()
+        # playback
+        if not convertingDirectory and len(sys.argv) >= 3 and sys.argv[2] == '-p':
+            import pyaudio
+
+            print('playing', convertedfilepath)
+            player = pyaudio.PyAudio()
+            stream = player.open(
+                format = pyaudio.paInt16,
+                channels = 1,
+                rate = 16384,
+                output = True
+            )
+            stream.write(bytes(pcmdata))
+            stream.close()
+            player.terminate()
+    elif convertingDirectory:
+        print("No valid .dat files found.")
 
 convert()
