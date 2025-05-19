@@ -13,4 +13,4 @@ convert.py path -p
 ```
 `path` can be a single file or a directory of files to convert
 
-`-p` can be optionally included to playback the file if converting a single file. (You will need to have the Pyaudio package installed)
+`-p` can be optionally included to playback the file if converting a single file. (You will need to have the PyAudio package installed)
