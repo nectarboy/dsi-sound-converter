@@ -8,7 +8,7 @@ The footer contains a string of the voice memo's timestamp, and a CRC16 checksum
 
 # Usage
 To convert from voice memos to 16 bit WAV files, run
-```python
+```shell
 convert.py path -p
 ```
 `path` can be a single file or a directory of files to convert
