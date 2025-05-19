@@ -2,7 +2,7 @@
 A script to convert voice memos from the DSi Sound app to wav files
 
 # DSi Voice Memo Files
-The DSi Sound app stores voice memos in IMA ADPCM format, packaged in .dat files containing a header, data block, and footer.
+The DSi Sound app stores voice memos in IMA ADPCM format at a sample rate of 16384, packaged in .dat files containing a header, data block, and footer.
 The header is 16 bytes, and contains the number of samples.
 The footer contains a string of the voice memo's timestamp, and a CRC16 checksum is appended to the end of the file.
 
