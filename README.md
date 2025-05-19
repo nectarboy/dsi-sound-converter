@@ -12,4 +12,5 @@ To convert from voice memos to 16 bit WAV files, run
 convert.py path -p
 ```
 `path` can be a single file or a directory of files to convert
+
 `-p` can be optionally included to playback the file if converting a single file. (You will need to have the Pyaudio package installed)
